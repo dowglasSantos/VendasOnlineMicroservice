@@ -1,0 +1,32 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: sale-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ssale-service
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+application:
+  produtoService:
+    url: http://localhost:8082
+    endpointConsultarProduto: ${application.produtoService.url}/produto
+
+  clienteService:
+    url: http://localhost:8081
+    endpointConsultarCliente: ${application.clienteService.url}/cliente/isCadastrado/{id}
+
+application-version: 1.0
