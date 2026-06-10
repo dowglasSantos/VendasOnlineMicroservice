@@ -21,8 +21,10 @@ public class SearchClientService {
 
     private List<Client> listClient;
 
-    public Page<Client> searchPageClient(Pageable pageable) {
-        return clientRepository.findAll(pageable);
+    public Page<Client> searchPageClient() {
+        Page<Client> page = clientRepository.findAll(Pageable.unpaged());
+
+        return page;
     }
 
     public Boolean clientIsRegistered(Long id) {

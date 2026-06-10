@@ -1,9 +1,9 @@
 package com.app.controller;
 
-import com.project.app.domain.Product;
-import com.project.app.dto.ProductDTO;
-import com.project.app.service.CreateProductService;
-import com.project.app.service.SearchProductService;
+import com.app.domain.Product;
+import com.app.dto.ProductDTO;
+import com.app.service.CreateProductService;
+import com.app.service.SearchProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -60,14 +60,14 @@ public class ProductController {
 
     @GetMapping()
     @Operation(summary = "Lista todos os produtos por páginas")
-    public ResponseEntity<Page<Product>> findAllProduct(Pageable pageable) {
-        return ResponseEntity.ok(searchProductService.findAllPageProduct(pageable));
+    public ResponseEntity<Page<Product>> findAllProduct() {
+        return ResponseEntity.ok(searchProductService.findAllPageProduct());
     }
 
-    @GetMapping("/{status}")
+    @GetMapping("/{pageNumber}/{pageSize}/{status}")
     @Operation(summary = "Lista os produtos com base no STATUS por páginas")
-    public ResponseEntity<Page<Product>> findAllByStatus(Pageable pageable, @PathVariable(value = "status", required = true) Product.Status status) {
-        return ResponseEntity.ok(searchProductService.findAllByStatus(pageable, status));
+    public ResponseEntity<Page<Product>> findAllByStatus(@PathVariable(value = "pageNumber", required = true) Integer pageNumber,@PathVariable(value = "pageSize", required = true) Integer pageSize, @PathVariable(value = "status", required = true) Product.Status status) {
+        return ResponseEntity.ok(searchProductService.findAllByStatus(pageNumber, pageSize,status));
     }
 
     @GetMapping("/{code}")

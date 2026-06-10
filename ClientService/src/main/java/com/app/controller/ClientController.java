@@ -52,8 +52,8 @@ public class ClientController {
 
     @GetMapping
     @Operation(summary = "Pagina de clientes")
-    public ResponseEntity<Page<Client>> searchPageClient(Pageable pageable) {
-        return ResponseEntity.ok(searchClientService.searchPageClient(pageable));
+    public ResponseEntity<Page<Client>> searchPageClient() {
+        return ResponseEntity.ok(searchClientService.searchPageClient());
     }
 
     @GetMapping("/clientIsRegistered/{id}")
