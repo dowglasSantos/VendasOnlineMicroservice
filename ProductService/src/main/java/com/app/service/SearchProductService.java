@@ -11,10 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SearchProductService {
     @Autowired
     IProductRepository productRepository;
+
+    private Optional<Product> product;
 
     public Page<Product> findAllPageProduct() {
         Page<Product> page = productRepository.findAll(Pageable.unpaged());
@@ -31,5 +35,9 @@ public class SearchProductService {
     public Product findByCode(Long code) {
         return productRepository.findByCode(code)
                 .orElseThrow(() -> new EntityNotFoundException(Product.class, "code", code.toString()));
+    }
+
+    public Optional<Product> IsActive() {
+        return product = productRepository.findByStatus("ACTIVE");
     }
 }
