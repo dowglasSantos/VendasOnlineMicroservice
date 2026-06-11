@@ -37,7 +37,7 @@ public class SearchProductService {
                 .orElseThrow(() -> new EntityNotFoundException(Product.class, "code", code.toString()));
     }
 
-    public Optional<Product> IsActive() {
-        return product = productRepository.findByStatus("ACTIVE");
+    public Optional<Product> isActive() {
+        return product = productRepository.findByStatus(Status.ACTIVE);
     }
 }

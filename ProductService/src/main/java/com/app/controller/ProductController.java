@@ -75,4 +75,11 @@ public class ProductController {
     public ResponseEntity<Product> findByCode(@PathVariable(value = "code", required = true) Long code) {
         return ResponseEntity.ok(searchProductService.findByCode(code));
     }
+
+    @GetMapping("/isActive")
+    @Operation(summary = "Filtra os produtos através do código")
+    public ResponseEntity<Product> findByStatus() {
+         searchProductService.isActive();
+         return ResponseEntity.ok().build();
+    }
 }
