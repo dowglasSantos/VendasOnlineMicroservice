@@ -48,6 +48,10 @@ public class CreateSaleService {
         return saleRepository.save(sale);
     }
 
+    public void deleteSale(Long saleId) {
+        saleRepository.deleteById(saleId);
+    }
+
     private void validateProduct(ProductDTO product, Sale sale) {
         if (product.status() == "INACTIVE") {
             sale.setStatus(Status.CANCELED);
