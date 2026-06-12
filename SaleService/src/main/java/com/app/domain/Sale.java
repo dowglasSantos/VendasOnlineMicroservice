@@ -1,9 +1,7 @@
 package com.app.domain;
 
-import com.app.service.restclient.ProductService;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -24,26 +22,29 @@ public class Sale {
     @Column(name = "code", unique = true, nullable = false)
     private Long code;
 
-    @Column(name = "clientId", unique = true, nullable = false)
-    private Long clientId;
+    @Column(name = "client_id", nullable = false)
+    private Long client_id;
 
-    @Column(name = "productId", nullable = false)
+    @Column(name = "product_id", nullable = false)
+    private Long product_id;
+
+    @ElementCollection
+    @CollectionTable(
+            name = "tb_sale_allProductQuantity",
+            joinColumns = @JoinColumn(name = "sale_id")
+    )
     private Set<ProductQuantity> allProductQuantity;
 
-    @Column(name = "totalValue", nullable = false)
-    private BigDecimal totalValue;
-
-    @Column(name = "dataOfSale", nullable = false)
-    private ZonedDateTime dataOfSale;
+    @Column(name = "total_value", nullable = false)
+    private BigDecimal total_value;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status;
 
     public Sale() {
-        allProductQuantity = new HashSet<>();
-        dataOfSale = ZonedDateTime.now();
-        this.totalValue = BigDecimal.ZERO;
+        this.allProductQuantity = new HashSet<>();
+        this.total_value = BigDecimal.ZERO;
     }
 
     public enum Status {
@@ -60,54 +61,52 @@ public class Sale {
         }
     }
 
-    public void statusValidation() {
+    private void statusValidation() {
         if(this.status == Status.COMPLETED || this.status == Status.CANCELED) {
             throw new UnsupportedOperationException("IMPOSSIBLE TO CHANGE A COMPLETED OR CANCELED SALE");
         }
     }
 
-    private void totalValueCalculation() {
-        for(ProductQuantity productQuantity : this.allProductQuantity) {
-            totalValue = totalValue.add(productQuantity.getValue());
-        }
-    }
+    private void recalculateTotalValue() {
+        this.total_value = BigDecimal.ZERO;
 
-    private void recalculateTotalSaleValue() {
-        statusValidation();
-        BigDecimal totalValue = BigDecimal.ZERO;
-
-        for(ProductQuantity productQuantity : this.allProductQuantity) {
-            totalValue = totalValue.add(productQuantity.getValue());
+        for (ProductQuantity productQuantity : this.allProductQuantity) {
+            this.total_value = this.total_value.add(productQuantity.getValue());
         }
     }
 
     public void addProduct(Product product, Long quantity) {
+
         statusValidation();
 
-        for(ProductQuantity productQuantitypq : this.allProductQuantity) {
-            if(productQuantitypq.getProduct().getId().equals(product.getId())) {
-                productQuantitypq.add(quantity);
-            } else {
-                ProductQuantity entity = new ProductQuantity();
-                entity.setProduct(product);
-                entity.setQuantity(quantity);
-
-                allProductQuantity.add(entity);
+        for (ProductQuantity pq : allProductQuantity) {
+            if (pq.getProduct_id().equals(product.getId())) {
+                pq.add(quantity);
+                recalculateTotalValue();
+                return;
             }
         }
 
-        totalValueCalculation();
+        ProductQuantity entity = new ProductQuantity();
+        entity.setProduct_id(product.getId());
+        entity.setProductValue(product.getValue());
+
+        entity.add(quantity);
+
+        allProductQuantity.add(entity);
+
+        recalculateTotalValue();
+
     }
 
-    public void removeProduct(Long code) {
+    public void removeProduct(Long productId) {
+
         statusValidation();
 
-        for(ProductQuantity productQuantity : this.allProductQuantity) {
-            if(productQuantity.getProduct().getCode().equals(code)) {
-                allProductQuantity.remove(productQuantity);
-            }
-        }
+        allProductQuantity.removeIf(
+                pq -> pq.getProduct_id().equals(productId)
+        );
 
-        recalculateTotalSaleValue();
+        recalculateTotalValue();
     }
 }

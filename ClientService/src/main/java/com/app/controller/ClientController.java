@@ -69,13 +69,13 @@ public class ClientController {
         return ResponseEntity.ok(searchClientService.getClientById(id));
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/getClientByEmail/{email}")
     @Operation(summary = "Busca um cliente atravez do email")
     public ResponseEntity<Client> getClientByEmail(@PathVariable(value = "email", required = true) String email) {
         return ResponseEntity.ok(searchClientService.getClientByEmail(email));
     }
 
-    @GetMapping("/{cpf}")
+    @GetMapping("/getClientByCpf/{cpf}")
     @Operation(summary = "Busca um cliente atravez do cpf")
     public ResponseEntity<Client> findClientByCpf(@PathVariable(value = "cpf", required = true) String cpf) {
         return ResponseEntity.ok(searchClientService.findClientByCpf(cpf));

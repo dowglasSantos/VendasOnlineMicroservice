@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Product {
     private Long id;
 
@@ -21,4 +20,8 @@ public class Product {
     private BigDecimal value;
 
     private String status;
+
+    public enum Status{
+        ACTIVE, INACTIVE;
+    }
 }

@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ClientService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ClientService.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ClientService.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ClientService.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ProductService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ProductService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SaleService.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SaleService.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SaleService.test.iml" filepath="$PROJECT_DIR$/.idea/modules/SaleService.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/VendasOnlineMicroservice.iml" filepath="$PROJECT_DIR$/.idea/VendasOnlineMicroservice.iml" />
     </modules>
   </component>

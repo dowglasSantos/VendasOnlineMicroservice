@@ -1,28 +1,27 @@
-package com.app.service.restclient;
+package com.app.service.beanservice;
 
+import com.app.dto.ClientDTO;
 import com.app.dto.ProductDTO;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class ProductService {
+public class BeanService {
     private final RestClient restClient;
 
-    public ProductDTO findById(Long code) {
+    public ClientDTO clientFindById(Long id) {
         return restClient.get()
-                .uri("http://localhost:8081/product/{id}", code)
+                .uri("http://localhost:8081/client/{id}", id)
                 .retrieve()
-                .body(ProductDTO.class);
+                .body(ClientDTO.class);
+
     }
 
-    public ProductDTO isActive(String status) {
+    public ProductDTO productFindByCode(Long code) {
         return restClient.get()
-                .uri("http://localhost:8081/product/{id}", status)
+                .uri("http://localhost:8082/product/{code}", code)
                 .retrieve()
                 .body(ProductDTO.class);
     }

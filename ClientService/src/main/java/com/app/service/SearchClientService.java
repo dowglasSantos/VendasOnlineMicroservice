@@ -30,6 +30,8 @@ public class SearchClientService {
     public Boolean clientIsRegistered(Long id) {
         Optional<Client> clientOptional = clientRepository.findById(id);
 
+        System.out.println("client is registered: " + clientOptional.get());
+
         return clientOptional.isPresent() ? true : false;
     }
 
