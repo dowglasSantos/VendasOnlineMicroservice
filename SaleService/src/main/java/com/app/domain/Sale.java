@@ -1,10 +1,9 @@
 package com.app.domain;
 
+import com.app.service.restclient.ProductService;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -29,7 +28,7 @@ public class Sale {
     private Long clientId;
 
     @Column(name = "productId", nullable = false)
-    private Set<ProductQuantity> productQuantity;
+    private Set<ProductQuantity> allProductQuantity;
 
     @Column(name = "totalValue", nullable = false)
     private BigDecimal totalValue;
@@ -41,12 +40,10 @@ public class Sale {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    private Product product;
-
     public Sale() {
-        productQuantity = new HashSet<>();
+        allProductQuantity = new HashSet<>();
         dataOfSale = ZonedDateTime.now();
-        product = new Product();
+        this.totalValue = BigDecimal.ZERO;
     }
 
     public enum Status {
@@ -69,17 +66,48 @@ public class Sale {
         }
     }
 
-    public void totalValueCalculation() {
-        for(ProductQuantity productQuantity : this.productQuantity) {
+    private void totalValueCalculation() {
+        for(ProductQuantity productQuantity : this.allProductQuantity) {
+            totalValue = totalValue.add(productQuantity.getValue());
+        }
+    }
+
+    private void recalculateTotalSaleValue() {
+        statusValidation();
+        BigDecimal totalValue = BigDecimal.ZERO;
+
+        for(ProductQuantity productQuantity : this.allProductQuantity) {
             totalValue = totalValue.add(productQuantity.getValue());
         }
     }
 
     public void addProduct(Product product, Long quantity) {
         statusValidation();
+
+        for(ProductQuantity productQuantitypq : this.allProductQuantity) {
+            if(productQuantitypq.getProduct().getId().equals(product.getId())) {
+                productQuantitypq.add(quantity);
+            } else {
+                ProductQuantity entity = new ProductQuantity();
+                entity.setProduct(product);
+                entity.setQuantity(quantity);
+
+                allProductQuantity.add(entity);
+            }
+        }
+
+        totalValueCalculation();
     }
 
-    public void removeProduct(Product product, Long quantity) {
+    public void removeProduct(Long code) {
         statusValidation();
+
+        for(ProductQuantity productQuantity : this.allProductQuantity) {
+            if(productQuantity.getProduct().getCode().equals(code)) {
+                allProductQuantity.remove(productQuantity);
+            }
+        }
+
+        recalculateTotalSaleValue();
     }
 }

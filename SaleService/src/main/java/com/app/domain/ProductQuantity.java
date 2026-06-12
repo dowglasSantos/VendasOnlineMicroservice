@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@Builder
 public class ProductQuantity {
     private Product product;
 

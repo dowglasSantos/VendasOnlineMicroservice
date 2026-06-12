@@ -1,12 +1,15 @@
 package com.app.service.restclient;
 
 import com.app.dto.ProductDTO;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Service
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class ProductService {
     private final RestClient restClient;
 
